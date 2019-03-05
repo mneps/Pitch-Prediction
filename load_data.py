@@ -8,24 +8,23 @@ import os
 # at-bats and the first one was three pitches (fastball, fastball, slider) and
 # the second at bat was a single pitch (curveball) the resulting list will be
 # [["FB", "FB", "SL"], ["CB"]]
-def get_data(dir_path):
-	files = os.listdir(dir_path)
-	files = list(filter(lambda x: os.path.splitext(x)[1] == ".csv", files))
-
+def get_data(filepath):
 	at_bats = []
 
-	for file in files:
-		file = os.path.join(dir_path, file)
-		with open(file, 'rt') as csvfile:
-			next(csvfile) # skip header line
-			filereader = csv.DictReader(csvfile)
+	with open(filepath, 'rt') as csvfile:
+		# next(csvfile) # skip header line
+		filereader = csv.DictReader(csvfile)
 
-			at_bat = []
-			for row in filereader:
-				at_bat += [row["mlbam_pitch_name"]]
-				if row["ab_total"] == row["ab_count"]:
-					at_bats += [at_bat]
-					at_bat = []
+		at_bat = []
+		tot=0
+		for row in filereader:
+			at_bat += [row["mlbam_pitch_name"]]
+			if row["ab_total"] == row["ab_count"]:
+				at_bats += [at_bat]
+				tot+=len(at_bat)
+				at_bat = []
+
+		print (at_bats, len(at_bats), tot)
 
 	return at_bats
 
