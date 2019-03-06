@@ -2,9 +2,9 @@
 import sys
 from load_data import *
 
+
 def main(filepath):
 	pitches = get_data(filepath)
-
 
 
 if __name__ == '__main__':

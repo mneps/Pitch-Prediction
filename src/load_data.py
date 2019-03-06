@@ -2,6 +2,7 @@
 import csv
 import os
 
+
 # Loads the csv files into a single two-dimensional list.  Each of the inner
 # lists represents a single at-bat with the elements within those lists
 # being the name of the pitch that was thrown.  For example, if there are two
@@ -12,7 +13,6 @@ def get_data(filepath):
 	at_bats = []
 
 	with open(filepath, 'rt') as csvfile:
-		# next(csvfile) # skip header line
 		filereader = csv.DictReader(csvfile)
 
 		at_bat = []

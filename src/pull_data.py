@@ -1,6 +1,7 @@
 
 import html5lib
 import pandas as pd
+import urllib.parse as urlparse
 import sys
 from calendar import month_abbr
 from pandas import read_html
@@ -29,6 +30,7 @@ def create_dict():
     team_abbr["CHW"] = "cha"
     team_abbr["KCR"] = "kca"
     team_abbr["LAA"] = "ana"
+    team_abbr["FLA"] = "flo"
     team_abbr["WSN"] = "wsh"
     team_abbr["NYM"] = "nyn"
     team_abbr["STL"] = "sln"
@@ -65,7 +67,7 @@ def create_csv_file(urls, pitcher_id):
                 single_game.to_csv(f, index=False, header=False)
 
 
-def main(bbref_url, pitcher_id, year):
+def main(bbref_url, pitcher_id):
     game_log = pd.io.html.read_html(bbref_url)[0]
     game_log.rename(columns={'Unnamed: 5':'H_A'}, inplace=True)
 
@@ -83,10 +85,12 @@ def main(bbref_url, pitcher_id, year):
         except:
             continue
 
-        if year != "postseason":
-            url = url_base + (str(year) + "_")
+        queries = urlparse.parse_qs((urlparse.urlparse(bbref_url)).query)
+        if 'year' in queries:
+            assert(int(queries['year'][0]) > 2010)
+            url = url_base + str(queries['year'][0]) + "_"
         else:
-            url = url_base + (str(game_log.Year[i]) + "_")
+            url = url_base + str(game_log.Year[i]) + "_"
 
         url += handle_date(game_log.Date[i], abbr_to_num)
         if game_log.H_A[i] == "@":
@@ -95,7 +99,7 @@ def main(bbref_url, pitcher_id, year):
             url += handle_teams(game_log.Opp[i], game_log.Tm[i], team_abbr)
         url += "1%2F&s_type=&h_size=700&v_size=500"
 
-        urls += [url]
+        urls.append(url)
 
 
     create_csv_file(urls, pitcher_id)
@@ -104,6 +108,6 @@ def main(bbref_url, pitcher_id, year):
 
 
 if __name__ == '__main__':
-    assert (len(sys.argv) == 4)
-    main(sys.argv[1], sys.argv[2], sys.argv[3])
+    assert (len(sys.argv) == 3)
+    main(sys.argv[1], sys.argv[2])
 
