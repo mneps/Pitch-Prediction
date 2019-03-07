@@ -17,6 +17,17 @@ python3 pull_data.py "[bbref_game_log_page]" [pitcher_id]
 
 The progam does very little error checking.  In fact, other than checking that two command line arguments are present and that the Baseball reference game log page is not from before 2011 (the site from which the statistics are pulled has data beginning in 2011), no error checking is performed at all.  If the command line arguments are incorrect in some way, behavior is undefined.  If input is correct, the program will pull statistics for every pitch the specified pitcher threw during the year referenced by the Baseball Reference page and save the information in a file called titled `[pitcher_id].csv` in the working directory.
 
+To download multiple players' stats at once, use the `pull_data.sh` script.  The script takes a filepath as a command line argument.  The file to which the path leads should be a textfile and in this file, each line should have the two arguments that the `pull_data.py` program takes in: a Baseball Reference URL and a player ID.  For example, the contents of an acceptable text file might look like this:
+```
+"https://www.baseball-reference.com/players/gl.fcgi?id=hunteto02&t=p&year=2011" 488984
+"https://www.baseball-reference.com/players/gl.fcgi?id=tanakma01&t=p&year=2018" 547888
+"https://www.baseball-reference.com/players/gl.fcgi?id=kershcl01&t=p&year=2015" 477132
+```
+To run the script, use:
+```
+./pull_data.sh [filename].txt
+```
+
 
 ## Run the Program
 To run the program, simply execute
