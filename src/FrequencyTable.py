@@ -18,18 +18,19 @@ class FrequencyTable(object):
     def __initPitchMap(self):
         perm = permutations(self.PITCH_TYPES, 2)
         convertPitches = list(perm)
+        for pitch in self.PITCH_TYPES:
+            convertPitches += [(pitch, pitch)]
         return convertPitches
     
     def __populate(self):
         for atBat in self.list:
             if len(atBat) < 3:
                 continue
-            prePitches = (atBat[0], atBat[1])
             for i in range(2, len(atBat)):
-                col = self.convertPitches.index(prePitches)
+                prevPitches = (atBat[i-2], atBat[i-1])
+                col = self.convertPitches.index(prevPitches)
                 row = self.PITCH_TYPES.index(atBat[i])
                 self.freqTable[col][row] += 1
-                prevPitches = (atBat[i-1], atBat[i])
 
     def __finalizeList(self):
         for col in range(len(self.freqTable)):

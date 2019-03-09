@@ -86,11 +86,11 @@ def main(bbref_url, pitcher_id):
             continue
 
         queries = urlparse.parse_qs((urlparse.urlparse(bbref_url)).query)
-        if 'year' in queries:
+        if 'post' in queries:
+            year = str(game_log.Year[i])
+        else:
             assert(int(queries['year'][0]) > 2010)
             year = str(queries['year'][0])
-        else:
-            year = str(game_log.Year[i])
         url = url_base + year + "_"
 
         url += handle_date(game_log.Date[i], abbr_to_num)
