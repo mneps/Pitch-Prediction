@@ -1,13 +1,15 @@
 import sys
 import pprint
-from itertools import permutations
+from GlobalVars import *
+from itertools import product
 
 class FrequencyTable(object):
     def __init__(self, list):
         self.list = list
         self.PITCH_TYPES = self.__findPitchTypes()
         self.convertPitches = self.__initPitchMap()
-        self.freqTable = [ [0 for _ in range(len(self.PITCH_TYPES))] for _ in range(len(self.PITCH_TYPES) ** 2)]
+        self.freqTable = \
+            [ [0 for _ in range(len(self.PITCH_TYPES))] for _ in range(len(self.PITCH_TYPES) ** LINK_LENGTH)]
         self.__populate()
         self.__finalizeList()
         
@@ -16,18 +18,21 @@ class FrequencyTable(object):
         return list(set(pitches))
 
     def __initPitchMap(self):
-        perm = permutations(self.PITCH_TYPES, 2)
+        perm = product(self.PITCH_TYPES, repeat=LINK_LENGTH)
         convertPitches = list(perm)
-        for pitch in self.PITCH_TYPES:
-            convertPitches += [(pitch, pitch)]
+        # for pitch in self.PITCH_TYPES:
+        #     samePitch = tuple()
+        #     for _ in range(LINK_LENGTH):
+        #         samePitch += (pitch,)
+        #     convertPitches.append(samePitch)
         return convertPitches
     
     def __populate(self):
         for atBat in self.list:
-            if len(atBat) < 3:
+            if len(atBat) < (LINK_LENGTH + 1):
                 continue
-            for i in range(2, len(atBat)):
-                prevPitches = (atBat[i-2], atBat[i-1])
+            for i in range(LINK_LENGTH, len(atBat)):
+                prevPitches = tuple(atBat[i-LINK_LENGTH:i])
                 col = self.convertPitches.index(prevPitches)
                 row = self.PITCH_TYPES.index(atBat[i])
                 self.freqTable[col][row] += 1
