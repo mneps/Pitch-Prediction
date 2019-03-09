@@ -1,5 +1,5 @@
-from __future__ import division
 import sys
+import pprint
 from itertools import permutations
 
 class FrequencyTable(object):
@@ -25,9 +25,11 @@ class FrequencyTable(object):
             if len(atBat) < 3:
                 continue
             prePitches = (atBat[0], atBat[1])
-            col = self.convertPitches.index(prePitches)
-            row = self.PITCH_TYPES.index(atBat[2])
-            self.freqTable[col][row] += 1
+            for i in range(2, len(atBat)):
+                col = self.convertPitches.index(prePitches)
+                row = self.PITCH_TYPES.index(atBat[i])
+                self.freqTable[col][row] += 1
+                prevPitches = (atBat[i-1], atBat[i])
 
     def __finalizeList(self):
         for col in range(len(self.freqTable)):
@@ -46,16 +48,13 @@ class FrequencyTable(object):
             pitchList.append((self.PITCH_TYPES[pitch], self.freqTable[col][pitch]))
         return pitchList
 
-# Sanity tests
-test = [["FF", "CU", "FF"], ["SL"], ["FF", "CU", "CU"]]
-freqTable = FrequencyTable(test)
-print("FreqTable")
-print (freqTable.freqTable)
-print("Test lookup for ('FF', 'CU')")
-print freqTable.lookup(("FF", "CU"))
-print("Test lookup for ('SL', 'CU')")
-print freqTable.lookup(("SL", "CU"))
-
+    def pprint(self):
+        print (self.PITCH_TYPES)
+        for pitchCombo in range(len(self.freqTable) - len(self.PITCH_TYPES)):
+            print("PITCH COMBO: ", self.convertPitches[pitchCombo], ":", \
+                  [ (self.PITCH_TYPES[pitch], self.freqTable[pitchCombo][pitch]) \
+                    for pitch in range(len(self.freqTable[pitchCombo]))])
+    
 
             
             
