@@ -10,12 +10,8 @@ class FrequencyTable(object):
         self.__populate()
         
     def __findPitchTypes(self):
-        pitchTypes = []
-        for atBat in self.list:
-            for pitch in atBat:
-                if pitch not in pitchTypes:
-                    pitchTypes.append(pitch)
-        return pitchTypes
+        pitches = [item for sublist in self.list for item in sublist]
+        return list(set(pitches))
 
     def __initPitchMap(self):
         perm = permutations(self.PITCH_TYPES, 2)
@@ -30,7 +26,6 @@ class FrequencyTable(object):
             col = self.convertPitches.index(prePitches)
             row = self.PITCH_TYPES.index(atBat[2])
             self.freqTable[col][row] += 1
-
             
             
     
