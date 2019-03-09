@@ -17,23 +17,15 @@ class Predictor():
 			for i in range(2, len(atBat)):
 				prevPitches = (atBat[i-2], atBat[i-1])
 				averages = self.freqTable.lookup(prevPitches)
-
-				sumPrevWeights = 0
+				
+				max_avg = 0
 				for j in range(len(averages)):
 					(pitch, weight) = averages[j]
-					orig_weight = weight
-					weight += sumPrevWeights
-					sumPrevWeights += orig_weight
-					averages[j] = (pitch, weight)
-
-				num = random.random()
-
-				for (pitch, weight) in averages:
-					if num < weight:
+					if weight > max_avg:
+						max_avg = weight
 						pitchType = pitch
-						break
 
-				if pitch == atBat[i]:
+				if pitchType == atBat[i]:
 					correctPredictions += 1
 
 				totalPitches += 1

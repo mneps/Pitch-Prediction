@@ -2,10 +2,9 @@ import csv
 import os
 from math import floor
 import sys
-
 from random import shuffle
 
-def main(filepath, split_percent):
+def split_file(filepath, split_percent):
 
     games = []
 
@@ -40,9 +39,6 @@ def main(filepath, split_percent):
 
         split_index = floor(split_percent * len(games))
 
-        print(len(games))
-        print(split_index)
-
         train_games = [item for sublist in games[:split_index] for item in sublist]
 
         test_games = [item for sublist in games[split_index:] for item in sublist]
@@ -63,13 +59,3 @@ def main(filepath, split_percent):
             writer.writeheader()
             for row in test_games:
                 writer.writerow(row)        
-
-
-
-
-
-if __name__ == '__main__':
-    assert(len(sys.argv) == 3)
-    assert(os.path.isfile(sys.argv[1]))
-    assert(os.path.splitext(sys.argv[1])[1] == ".csv")
-    main(sys.argv[1], float(sys.argv[2]))

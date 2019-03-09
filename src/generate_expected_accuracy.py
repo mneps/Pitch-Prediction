@@ -4,19 +4,16 @@ from load_data import *
 from random import random
 import numpy as np
 
-TRAILS = 10000
+TRIALS = 1000
 
 def predict_pitch(pitch_prob):
-    # print(pitch_prob)
     rand = random()
-    # print("rand: %f" %rand)
     for (pitch, prob) in pitch_prob:
         if rand < prob:
-            # print(pitch)
             return pitch
 
 
-def main(train_fp, test_fp):
+def generate_accuracy(train_fp, test_fp):
 
     pitches = [item for sublist in get_data(train_fp) for item in sublist]
 
@@ -41,7 +38,7 @@ def main(train_fp, test_fp):
 
     accuracy_list = []
 
-    for _ in range(TRAILS):
+    for _ in range(TRIALS):
 
         correct = 0
 
@@ -52,21 +49,10 @@ def main(train_fp, test_fp):
 
         accuracy = correct / len(test_pitches)
 
-        print(accuracy)
-
         accuracy_list.append(accuracy)
 
     print("Mean:   %f" %(np.mean(accuracy_list)))
     print("Stdev:  %f" %(np.std(accuracy_list)))
-    print(pitch_prob)
+    # print(pitch_prob)
 
 
-
-
-
-if __name__ == '__main__':
-    assert (len(sys.argv) == 3)
-    assert(os.path.isfile(sys.argv[1]))
-    assert(os.path.splitext(sys.argv[1])[1] == ".csv")
-    assert(os.path.splitext(sys.argv[2])[1] == ".csv")
-    main(sys.argv[1], sys.argv[2])
