@@ -1,7 +1,7 @@
 import sys
 import pprint
 from GlobalVars import *
-from itertools import permutations
+from itertools import product
 
 class FrequencyTable(object):
     def __init__(self, list):
@@ -18,13 +18,13 @@ class FrequencyTable(object):
         return list(set(pitches))
 
     def __initPitchMap(self):
-        perm = permutations(self.PITCH_TYPES, LINK_LENGTH)
+        perm = product(self.PITCH_TYPES, repeat=LINK_LENGTH)
         convertPitches = list(perm)
-        for pitch in self.PITCH_TYPES:
-            samePitch = tuple()
-            for _ in range(LINK_LENGTH):
-                samePitch += (pitch,)
-            convertPitches.append(samePitch)
+        # for pitch in self.PITCH_TYPES:
+        #     samePitch = tuple()
+        #     for _ in range(LINK_LENGTH):
+        #         samePitch += (pitch,)
+        #     convertPitches.append(samePitch)
         return convertPitches
     
     def __populate(self):
