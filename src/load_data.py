@@ -24,7 +24,7 @@ def get_data(filepath):
 				tot+=len(at_bat)
 				at_bat = []
 
-		print (at_bats, len(at_bats), tot)
+		# print (at_bats, len(at_bats), tot)
 
 	return at_bats
 

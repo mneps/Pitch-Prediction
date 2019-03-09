@@ -18,16 +18,19 @@ class FrequencyTable(object):
     def __initPitchMap(self):
         perm = permutations(self.PITCH_TYPES, 2)
         convertPitches = list(perm)
+        for pitch in self.PITCH_TYPES:
+            convertPitches += [(pitch, pitch)]
         return convertPitches
     
     def __populate(self):
         for atBat in self.list:
             if len(atBat) < 3:
                 continue
-            prePitches = (atBat[0], atBat[1])
-            col = self.convertPitches.index(prePitches)
-            row = self.PITCH_TYPES.index(atBat[2])
-            self.freqTable[col][row] += 1
+            for i in range(2, len(atBat)):
+                prevPitches = (atBat[i-2], atBat[i-1])
+                col = self.convertPitches.index(prevPitches)
+                row = self.PITCH_TYPES.index(atBat[i])
+                self.freqTable[col][row] += 1
 
     def __finalizeList(self):
         for col in range(len(self.freqTable)):
@@ -46,15 +49,6 @@ class FrequencyTable(object):
             pitchList.append((self.PITCH_TYPES[pitch], self.freqTable[col][pitch]))
         return pitchList
 
-# Sanity tests
-test = [["FF", "CU", "FF"], ["SL"], ["FF", "CU", "CU"]]
-freqTable = FrequencyTable(test)
-print("FreqTable")
-print (freqTable.freqTable)
-print("Test lookup for ('FF', 'CU')")
-print freqTable.lookup(("FF", "CU"))
-print("Test lookup for ('SL', 'CU')")
-print freqTable.lookup(("SL", "CU"))
 
 
             
