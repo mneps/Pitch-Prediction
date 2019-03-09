@@ -32,5 +32,5 @@ To run the script, use:
 ## Run the Program
 To run the program, simply execute
 ```
-python3 main.py data/[filename].csv
+python3 main.py [filename].csv
 ```
