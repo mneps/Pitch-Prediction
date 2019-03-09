@@ -55,8 +55,8 @@ def handle_teams(away, home, team_abbr):
     return check_abbr(home, team_abbr, url)
 
 
-def create_csv_file(urls, pitcher_id):
-    filename = pitcher_id + ".csv"
+def create_csv_file(urls, pitcher_id, year):
+    filename = pitcher_id + "-" + year + ".csv"
 
     for i in range(len(urls)):
         single_game = pd.io.html.read_html(urls[i])[0]
@@ -88,9 +88,10 @@ def main(bbref_url, pitcher_id):
         queries = urlparse.parse_qs((urlparse.urlparse(bbref_url)).query)
         if 'year' in queries:
             assert(int(queries['year'][0]) > 2010)
-            url = url_base + str(queries['year'][0]) + "_"
+            year = str(queries['year'][0])
         else:
-            url = url_base + str(game_log.Year[i]) + "_"
+            year = str(game_log.Year[i])
+        url = url_base + year + "_"
 
         url += handle_date(game_log.Date[i], abbr_to_num)
         if game_log.H_A[i] == "@":
@@ -102,7 +103,7 @@ def main(bbref_url, pitcher_id):
         urls.append(url)
 
 
-    create_csv_file(urls, pitcher_id)
+    create_csv_file(urls, pitcher_id, year)
 
 
 
